@@ -51,7 +51,7 @@ bot.on('message',async msg=>{
     }
 
 
-    bot.sendMessage(chatId,'gapingizga cunmadim')
+    bot.sendMessage(chatId,'gapingizga tushunmadim')
 })
 bot.on('callback_query',msg =>{
     const data = msg.data
@@ -63,12 +63,12 @@ bot.on('callback_query',msg =>{
 
     if(data == obj[chatId]){
         return bot.sendMessage(chatId,
-             'Siz tugri javob berdiz!');
+             'Siz tugri javob berdingiz!');
     }
     else {
         return bot.sendMessage(
             chatId,
-             `Siz xato javob berdiz ${data}! To'g'ri javob: ${obj[chatId]} `,
+             `Siz xato javob berdingiz ${data}! To'g'ri javob: ${obj[chatId]} `,
              againOption);
         
     }
