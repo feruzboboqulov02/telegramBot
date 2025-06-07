@@ -1,5 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
+const { gameOptions, againOption } = require('./options');
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
@@ -7,59 +8,14 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
 const obj={}
 
-const gameOptions={
-    reply_markup:{
-        inline_keyboard:[
-            [
-                {
-                    text:"1",
-                    callback_data: '1'
-                },
-                {
-                    text:"2",
-                    callback_data: '2'
-                },
-                {
-                    text:"3",
-                    callback_data: '3'
-                }
-            ],
-            [
-                {
-                    text:"4",
-                    callback_data: '4'
-                },
-                {
-                    text:"5",
-                    callback_data: '5'
-                },
-                {
-                    text:"6",
-                    callback_data: '6'
-                }
-            ],
-            [
-                {
-                    text:"7",
-                    callback_data: '7'
-                },
-                {
-                    text:"8",
-                    callback_data: '8'
-                },
-                {
-                    text:"9",
-                    callback_data: '9'
-                }
-            ],
-            [
-                {
-                    text:"0",
-                    callback_data: '0'
-                }
-            ]
-        ]
-    }
+ 
+
+const startGame = async (chatId)=> {
+    await bot.sendMessage(chatId, 'Let\'s play a game! Send me a number between 1 and 10.');
+        const randomNumber = Math.floor(Math.random() * 10);
+        obj[chatId] = randomNumber;
+        await bot.sendMessage(chatId, 'I have selected a random number between 1 and 10. Try to guess it!',
+            gameOptions);
 }
 const bootstrap =() => {
     bot.setMyCommands([{
@@ -91,14 +47,31 @@ bot.on('message',async msg=>{
         return  bot.sendMessage(chatId, 'This is a simple Telegram bot created using node-telegram-bot-api.');
     }
     if (text === '/game') {
-        await bot.sendMessage(chatId, 'Let\'s play a game! Send me a number between 1 and 10.');
-        const randomNumber = Math.floor(Math.random() * 10);
-        obj[chatId] = randomNumber;
-        return  bot.sendMessage(chatId, 'I have selected a random number between 1 and 10. Try to guess it!',gameOptions);
+        return startGame(chatId);
     }
 
 
     bot.sendMessage(chatId,'gapingizga cunmadim')
+})
+bot.on('callback_query',msg =>{
+    const data = msg.data
+    const chatId = msg.message.chat.id;
+
+    if (data === '/again') {
+        return startGame(chatId);
+    }
+
+    if(data == obj[chatId]){
+        return bot.sendMessage(chatId,
+             'Siz tugri javob berdiz!');
+    }
+    else {
+        return bot.sendMessage(
+            chatId,
+             `Siz xato javob berdiz ${data}! To'g'ri javob: ${obj[chatId]} `,
+             againOption);
+        
+    }
 })
 }
 
