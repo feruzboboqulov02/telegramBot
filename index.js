@@ -36,10 +36,10 @@ const bootstrap =() => {
 bot.on('message',async msg=>{
     const text = msg.text;
     const chatId = msg.chat.id;
-
+    
 
     if (text === '/start') {
-        await bot.sendAnimation(chatId,'https://tlgrm.eu/_/stickers/232/efc/232efc5a-b6eb-4d09-abf4-4252d60747f5/256/3.webp')
+        await bot.sendAnimation(chatId,'https://tlgrm.eu/_/stickers/4dd/300/4dd300fd-0a89-3f3d-ac53-8ec93976495e/256/12.webp')
         return bot.sendMessage(chatId, 'Welcome to the bot! Please send me a message.');
     }
     if (text === '/info'){
@@ -47,6 +47,8 @@ bot.on('message',async msg=>{
         return  bot.sendMessage(chatId, 'This is a simple Telegram bot created using node-telegram-bot-api.');
     }
     if (text === '/game') {
+        console.log(msg);
+        
         return startGame(chatId);
     }
 
